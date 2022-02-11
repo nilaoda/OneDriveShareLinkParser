@@ -1,0 +1,66 @@
+﻿<Window x:Class="OnedriveShareLinkParser.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OnedriveShareLinkParser"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
+        Title="OnedriveShareLinkParser v20220210" Height="550" Width="800">
+    <Window.Resources>
+        <local:AutoNumberValueConverter x:Key="autoNumberValueConverter" />
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="80"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="Txt_Link" Grid.Column="0" VerticalContentAlignment="Center" TextWrapping="Wrap"></TextBox>
+            <Button x:Name="Btn_Parse" Grid.Column="1" FontSize="16" Click="Btn_Parse_Click">解析</Button>
+        </Grid>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="80"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="Txt_Cookie" VerticalContentAlignment="Center"></TextBox>
+            <Button x:Name="Btn_RenewCookie" Grid.Column="1" FontSize="16" Click="Btn_RenewCookie_Click">刷新</Button>
+        </Grid>
+        <Grid Grid.Row="1" Margin="0,3">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center" FontSize="16" Margin="6,0,0,0">下载路径：</TextBlock>
+                <TextBox x:Name="Txt_SavePath" VerticalContentAlignment="Center" Width="300" Margin="6,0,0,0"/>
+                <Button x:Name="Btn_SelectSavePath" FontSize="16" Click="Btn_SelectSavePath_Click" Margin="6,0,0,0">选择</Button>
+                <TextBlock VerticalAlignment="Center" FontSize="16" Margin="6,0,0,0">数量限制：</TextBlock>
+                <TextBox x:Name="Txt_Limit" VerticalContentAlignment="Center" Width="50" HorizontalContentAlignment="Center" FontSize="16">0</TextBox>
+            </StackPanel>
+        </Grid>
+        <DataGrid Grid.Row="2" x:Name="Data_Output" EnableRowVirtualization="True" IsReadOnly="True" AutoGenerateColumns="True">
+            <DataGrid.RowHeaderStyle>
+                <Style TargetType="{x:Type DataGridRowHeader}">
+                    <Setter Property="Content">
+                        <Setter.Value>
+                            <MultiBinding Converter="{StaticResource autoNumberValueConverter}">
+                                <Binding />
+                                <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type DataGrid}}" />
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.RowHeaderStyle>
+            <DataGrid.ContextMenu>
+                <ContextMenu VerticalAlignment="Center" DataContext="{Binding}" x:Name="contextMenu1">
+                    <MenuItem Header="推送选中文件到IDM" Click="MenuItem_Click"/>
+                    <Separator />
+                    <MenuItem Header="推送全部文件到IDM" Click="MenuItem_Click_1"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+    </Grid>
+</Window>
